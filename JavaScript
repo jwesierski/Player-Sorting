@@ -1,0 +1,254 @@
+//console errors are 7 or 8 lines too high
+
+//5/25/2021 I need to display those playing on the output 
+//or and I need to take what is in the array and sort them into teams
+//one guy mentioned on slack that maybe finding a way to store 
+//or hold stuff temporarily in the array???
+
+let playing = [];//8 players maximum
+
+//array displayed as check boxes
+let players = [
+  {"name": "Brad", "score": 4},
+  {"name": "Nick", "score": 4},
+  {"name": "Sam", "score": 3},
+  {"name": "Jack", "score": 3},
+  {"name": "Jeremy", "score": 3},
+  {"name": "Colin", "score": 1}, 
+  {"name": "Albert", "score": 1},
+  {"name": "Joe", "score": 2},
+  {"name": "Greg", "score": 2},
+  {"name": "Stephan", "score": 4}
+]
+
+//loop to display players[] as checkboxes
+let myDiv = document.getElementById("cboxes");
+
+for (let i = 0; i < players.length; i++) {
+    let checkBox = document.createElement("input");
+    let label = document.createElement("label");
+    checkBox.type = "checkbox";
+    checkBox.value = players[i].score;
+    checkBox.id = 'player-'+i;
+    label.htmlFor = 'player-'+i;
+    myDiv.appendChild(checkBox);
+    myDiv.appendChild(label);
+    label.appendChild(document.createTextNode(players[i].name));
+}
+
+//pushes checked boxes to playing array
+function checkCheckbox(){
+
+  let checkedPlayers = document.querySelectorAll('#cboxes input');
+  let amountOfPlayers = 0;
+  playing = [];
+  
+  for(let i = 0; i < checkedPlayers.length; i++){
+    if(checkedPlayers[i].checked){
+        amountOfPlayers++;
+      playing.push({
+          "name": checkedPlayers[i].nextSibling.textContent,
+         "score":checkedPlayers[i].value
+        })
+    } 
+    
+  }
+  
+//THIS IS PART OF CHECK CHECK BOX ()
+  //checks if amount of players selected is equal to 8
+ //might change this later to simply not let less or more than 8 players press the teams button
+  if(amountOfPlayers != 8){
+    let errMessage = amountOfPlayers < 8 ? 'You only selected '+amountOfPlayers+ ' players, make sure to select 8 players' : 'You have selected too many players (8 max).';
+    alert(errMessage);
+  } else {
+    alert('All good, 8 players have been selected, time to play!');
+    // we have our 8 players:
+    console.log(playing);
+    document.write("name");
+    //document.write(playing);
+    
+  }
+  
+}
+
+let team1 = []; //the first team to sort into
+let team2=[]; //the second team to sort into
+
+document.write("All Players: <br>")
+for (var i=0;i<players.length;i+=1) {
+    document.write(players[i].name + " score: " + players[i].score + "<br>");
+  }
+
+function thosePlaying(){
+ console.log("<br>" + "Those Playing: <br>");
+  for (var i=0; i<8; i++) {
+    //here it will print those selected once they are pushed
+    //playing.push(players[i]);
+    console.log(playing[i].name + "<br>");
+  }
+}
+//loop to go through those selected as playing
+
+for (var i=0; i<8; i++) {  
+//sorts the 4 equally
+  if (playing[i].score == "4" && team1.length === 0){
+    
+    team1.push(playing[i]);
+    document.write("Team 1: " + team1[0].name);
+    
+  } else if (playing[i].score == "4" && team1.length == 1 && team2.length === 0) {
+    team2.push(playing[i]);
+    document.write("<br>" + "Team 2: " + team2[0].name);
+    
+   
+  } else if (playing[i].score == "4" && team2.length == 1 && team1.length == 1){
+    
+    team1.push(playing[i]);
+    document.write("<br>" + "Team 1: " + team1[1].name);
+    
+  }else if (playing[i].score == "4" && team1.length == 2 && team2.length == 1){
+    
+    team2.push(playing[i]);
+    document.write("<br>" + "Team 2: " + team2[1].name);
+    
+    
+//Sorting 3's with no 4's
+  } else if (playing[i].score == "3" && team1.length === 0){
+    
+    team1.push(playing[i]);
+    document.write("Team 1: " + team1[0].name);
+    
+  } else if (playing[i].score == "3" && team1.length == 1 && team2.length === 0) {
+    
+    team2.push(playing[i]);
+    document.write("<br>" + "Team 2: " + team2[0].name);
+    
+   
+  } else if (playing[i].score == "3" && team2.length == 1 && team1.length == 1){
+    
+    team1.push(playing[i]);
+    document.write("<br>" + "Team 1: " + team1[1].name);
+    
+  }else if (playing[i].score == "3" && team1.length == 2 && team2.length == 1){
+    
+    team2.push(playing[i]);
+    document.write("<br>" + "Team 2: " + team2[1].name);
+    
+    
+//if each team has equal amount of 4's equal out the 3's
+  } else if (playing[i].score == "3" && team1[0].score == "4" && team2[0].score != "4"){
+    team2.push(playing[i]);
+    document.write("<br>" + "Team 1: " + team2[0].name);
+    
+  } else if (playing[i].score == "3" && team2[0].score == "4" && team1[1].score != "4"){
+    team1.push(playing[i]);
+    document.write("<br>" + "Team 1: " + team1[1].name);
+    
+  } else if (playing[i].score == "3" && team1[1].score == "4" && team2[1].score != "4"){
+    team2.push(playing[i]);
+    document.write("<br>" + "Team 2: " + team2[1].name);
+    
+    //I would rather use team1[2].score != "3" below instead of team1.length != 3
+  } else if (playing[i].score == "3" && team2[1].score == "4" && team1.length == 2){
+    team1.push(playing[i]);
+    document.write("<br>" + "Team 1: " + team1[2].name);
+
+   } else if (playing[i].score == "3" && team1[2].score == "3" && team2.length == 2){
+     team2.push(playing[i]);
+     document.write("<br>" + "Team 2: " + team2[2].name);
+     
+   }else if (playing[i].score == "3" && team2[2].score == "3" ){
+     team1.push(playing[i]);
+     document.write("<br>" + "Team 1: " + team1[3].name);
+     
+   } else if (playing[i].score == "3" && team1[3].score == "3"){
+     team2.push(playing[i]);
+     document.write("<br>" + "Team 2: " + team2[3].name);
+     
+     
+//sorting of 2's with an equal amount of 3's starting with one 3 on team 1
+} else if (playing[i].score == "2" && team1[0].score == "3" && team2.length === 0){
+  team2.push(playing[i])
+   document.write("<br>" + "Team 2: " + team2[0].name);
+}else if (playing[i].score == "2" && team2[0].score == "2" && team2.length == 1){
+  team1.push(playing[i])
+  document.write("<br>" + "Team 1: " + team1[1].name);
+  
+} else if (playing[i].score == "2" && team1[1].score == "2" && team1.length == 2){
+  team2.push(playing[i]);
+  document.write("<br>" + "Team 2: " + team2[1].name);
+  //now time to get more complicated adding the 2's when there are 3 and 4's
+  //based on the length and numbers
+  
+ 
+} else if (playing[i].score == "1" && team1[0].score == "4" && team2[0].score != "4"){
+    team1.push(playing[i]);
+    document.write("<br>" + "Team 1: " + team1[3].name);
+    //if 1 team has two 4's they also get the 1
+  } else if (playing[i].score == "1" && team1[1].score == "4" && team2[1].score != "4"){
+    team1.push(playing[i]);
+    document.write("<br>" + "Team 1: " + team1[3].name)
+ } else if (playing[i].score == "1" && team1[0].score == "4" && team1.length < 3 ){
+   team1.push(playing[i]);
+   document.write("<br>" + "Team 1: " + team1[2].name);
+ }else if (playing[i].score == "1" && team1[0].score == "4" && team2.length < 3 ){
+   team2.push(playing[i]);
+   document.write("<br>" + "Team 2: " + team2[2].name);
+ } else if (playing[i].score == "1" && team1[3].score == "1" ){
+   team2.push(playing[i]);
+   document.write("<br>" + "Team 2: " + team2[3].name);
+    //back to twos to fill in the blanks  
+ } else if (playing[i].score == "1" && (team1[0].score == team2[0].score) 
+            && (team1[1].score == team2[1].score) && team1.length < 4){
+    team1.push(playing[i]);
+    document.write("<br>" + "Team 1: " + team1[2].name);
+ }else if (playing[i].score =="1" && team1.length < 4){
+     team1.push(playing[i]);
+    document.write("<br>" + "Team 1: " + team1[2].name);
+ 
+   
+   //scores of 2
+}else if (playing[i].score == "2"  && team1.length < 4){
+   team1.push(playing[i]);
+   document.write("<br>" + "Team 1: " + team1[3].name);//this one puts jo
+   
+ } else if (playing[i].score == "2" && team2.length < 4){
+   team2.push(playing[i]);   
+  document.write("<br>" + "Team 2: " + team2[3].name);
+  } else {
+    document.write("<br>" + "Player list needs edits");
+    break;
+  }
+  
+}
+
+document.write("<br>");
+var i = 0;
+while (i < team1.length) {
+    document.write("<br>" + "Team 1: " + team1[i].name)
+i++
+}
+document.write("<br>");
+var i = 0;
+while (i < team2.length) {
+    document.write("<br>" + "Team 2: " + team2[i].name)
+i++
+}
+ //might have to move the 1 sorting to the end
+             
+  //just randomize the array so that the teams could change
+  /*else{
+    document.write("<br> The skill of the players selected are not diverse enough to need a sorting algorith :/")
+  }*/
+    /*if only 1 team has one four they also get the 1
+  */
+  
+  //ok I have sorted the fours, 
+  //now math needs to be done to calculate how much each team is worth
+  //based off the number 4 or 8, then we allocate the 3s
+  
+  
+
+  
+
+
